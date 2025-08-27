@@ -96,7 +96,6 @@
       - On slice we spawn two halves with split normals and give them outward velocity; we also emit juice particles and paint a splat decal.
       - Combos: every unique fruit sliced during the same swipe increments combo; releasing the pointer commits the multiplier.
   */
-
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
@@ -167,7 +166,7 @@
 
   // --- Fruit & Bomb objects ---
   let nextId=1;
-  function spawnFruit(opts={}){
+  function spawnFruit(opts={100}){
     const id = nextId++;
     const kind = opts.kind || pickFruit();
     const size = opts.size || rand(38, 64);
