@@ -431,6 +431,37 @@
   // Resize canvas to maintain 9:16 but fit device pixel ratio
   function resize(){ const dpr = Math.min(2, window.devicePixelRatio||1); const rect = canvas.getBoundingClientRect(); canvas.width = Math.floor(rect.width*dpr); canvas.height = Math.floor(rect.height*dpr); }
   window.addEventListener('resize', resize); setTimeout(resize, 10);
+// Reference your start button
+const startBtn = document.getElementById("startBtn");
+
+// When clicked, start the game
+startBtn.addEventListener("click", () => {
+  // Hide menu screen
+  document.getElementById("menu").style.display = "none";
+
+  // Reset game state
+  score = 0;
+  lives = 3;
+  timer = 60; // arcade mode for example
+  fruits = [];
+  bombs = [];
+  slicing = false;
+
+  // Update HUD
+  document.getElementById("score").textContent = score;
+  document.getElementById("lives").textContent = lives;
+  document.getElementById("time").textContent = timer;
+
+  // Start spawning fruit
+  if (spawnInterval) clearInterval(spawnInterval);
+  spawnInterval = setInterval(() => { if(!isPaused) spawnFruit(); }, 300);
+
+  // Start main loop if not already running
+  if (!loopRunning) {
+    loopRunning = true;
+    gameLoop();
+  }
+});
 
   </script>
 </body>
