@@ -462,6 +462,50 @@ startBtn.addEventListener("click", () => {
     gameLoop();
   }
 });
+let spawnInterval = null;
+let loopRunning = false;
+
+// Spawn fruit function (keep your version here)
+function spawnFruit() {
+  const x = Math.random() * canvas.width;
+  const y = canvas.height + 50;
+  const r = 25 + Math.random() * 15;
+  const vx = (Math.random() - 0.5) * 6;
+  const vy = - (12 + Math.random() * 8);
+  const colors = ["red","orange","yellow","green","purple","pink"];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  fruits.push(new Fruit(x, y, r, vx, vy, color));
+}
+
+// Start button logic
+startBtn.addEventListener("click", () => {
+  document.getElementById("menu").style.display = "none";
+
+  // Reset state
+  score = 0;
+  lives = 3;
+  fruits = [];
+  bombs = [];
+  slicing = false;
+  isPaused = false;
+
+  document.getElementById("score").textContent = score;
+  document.getElementById("lives").textContent = lives;
+
+  // Clear any old spawn loop
+  if (spawnInterval) clearInterval(spawnInterval);
+
+  // Start spawning fruit every 300ms
+  spawnInterval = setInterval(() => {
+    if (!isPaused) spawnFruit();
+  }, 300);
+
+  // Start main loop once
+  if (!loopRunning) {
+    loopRunning = true;
+    gameLoop();
+  }
+});
 
   </script>
 </body>
