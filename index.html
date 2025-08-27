@@ -240,7 +240,7 @@
   function showFloatText(text, x, y){ floaters.push({ text, x, y, t:0 }); }
 
   // --- Spawn logic ---
-  function updateSpawner(dt){
+  function updateSpawner(100){
     G.waveTimer -= dt; if (G.waveTimer<=0){
       const n = rint(2,5);
       for (let i=0;i<n;i++) setTimeout(()=>spawnFruit(), i*80);
