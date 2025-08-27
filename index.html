@@ -428,7 +428,78 @@
   // Resize canvas to maintain 9:16 but fit device pixel ratio
   function resize(){ const dpr = Math.min(2, window.devicePixelRatio||1); const rect = canvas.getBoundingClientRect(); canvas.width = Math.floor(rect.width*dpr); canvas.height = Math.floor(rect.height*dpr); }
   window.addEventListener('resize', resize); setTimeout(resize, 10);
+<!DOCTYPE html>
+}
+draw() {
+ctx.beginPath();
+ctx.fillStyle = this.color;
+ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+ctx.fill();
+}
+}
 
+
+function spawnFruit() {
+const x = Math.random() * canvas.width;
+const y = canvas.height + 50;
+const r = 25 + Math.random() * 15;
+const vx = (Math.random() - 0.5) * 6;
+const vy = - (10 + Math.random() * 8);
+const colors = ["red","orange","yellow","green","purple","pink"];
+const color = colors[Math.floor(Math.random() * colors.length)];
+fruits.push(new Fruit(x, y, r, vx, vy, color));
+}
+
+
+// Faster spawn rate: every 400ms
+setInterval(() => { if(!isPaused) spawnFruit(); }, 400);
+
+
+function gameLoop() {
+if (!isPaused) {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+for (let f of fruits) {
+f.update();
+f.draw();
+}
+
+
+fruits = fruits.filter(f => f.alive);
+}
+requestAnimationFrame(gameLoop);
+}
+
+
+// Slice detection (basic swipe check)
+let slicing = false;
+canvas.addEventListener("mousedown", () => slicing = true);
+canvas.addEventListener("mouseup", () => slicing = false);
+canvas.addEventListener("mousemove", e => {
+if (!slicing) return;
+for (let f of fruits) {
+const dx = f.x - e.clientX;
+const dy = f.y - e.clientY;
+if (Math.sqrt(dx*dx+dy*dy) < f.r) {
+f.alive = false;
+score += 10;
+document.getElementById("score").textContent = score;
+}
+}
+});
+
+
+document.getElementById("pauseBtn").addEventListener("click",()=>{
+isPaused = !isPaused;
+document.getElementById("pauseBtn").textContent = isPaused?"Resume":"Pause";
+});
+
+
+gameLoop();
+</script>
+</body>
+</html>
   </script>
 </body>
 </html>
